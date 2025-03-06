@@ -1,0 +1,58 @@
+.appbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #1f5186;
+    padding: 10px 20px;
+    color: #fff;
+    z-index: 1000;
+  }
+  
+  .appbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .appbar-logo a {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  .appbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .appbar-nav a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #fff;
+    transition: opacity 0.3s ease;
+  }
+  
+  .appbar-nav a:hover {
+    opacity: 0.8;
+  }
+  
+  .appbar-nav button {
+    background-color: #ff6b6b;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .appbar-nav button:hover {
+    background-color: #ff4c4c;
+  }
+  

@@ -1,0 +1,37 @@
+.favorites-container {
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.favorites-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.favorites-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+
+
+.favorite-item button {
+  background-color: #ff6b6b;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.favorite-item button:hover {
+  background-color: #ff4c4c;
+}
+
+
