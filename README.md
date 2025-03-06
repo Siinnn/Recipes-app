@@ -2,7 +2,7 @@ Recipe App
 This is a recipe application that allows users to search for recipes, view recipe details, add recipes to their favorites, and access personalized content. It uses the Tasty API to fetch recipes and supports user authentication to access protected features such as favorites.
 
 Features
-  User Authentication: Users must log in to access the main features of the app.
+  User Authentication: Users must log in to access the main features of the app.(username === 'yanis' && password === 'ali')
   Recipe Search: Search for recipes by name or ingredient.
   Recipe Details: View detailed information about a selected recipe, including ingredients, cooking time, and instructions.
   Favorites: Users can add recipes to their favorites list and remove them as desired.
