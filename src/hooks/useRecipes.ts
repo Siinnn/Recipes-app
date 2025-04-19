@@ -68,49 +68,87 @@ interface ApiResponse {
 const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const useRecipes = (query: string) => {
+const useRecipes = (query: string = '') => {
   const [recipes, setRecipes] = useState<Recipe[]>([]); // State to store the fetched recipes
   const [loading, setLoading] = useState<boolean>(false); // State to handle loading state
   const [error, setError] = useState<Error | null>(null); // State to handle errors
   const callCountRef = useRef<number>(0); // Ref to track the number of API calls made
+  const lastRandomOffsetRef = useRef<number>(-1);
+
+  const getRandomOffset = () => {
+    let offset;
+    do {
+      offset = Math.floor(Math.random() * 100);
+    } while (offset === lastRandomOffsetRef.current);
+    lastRandomOffsetRef.current = offset;
+    return offset;
+  };
+
+  const fetchRandomRecipes = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get<ApiResponse>(BASE_URL, {
+        params: { 
+          q: '',
+          from: getRandomOffset(),
+          size: 5,
+          tags: 'under_30_minutes'
+        },
+        headers: {
+          'X-RapidAPI-Key': API_KEY,
+          'X-RapidAPI-Host': 'tasty.p.rapidapi.com'
+        }
+      });
+      
+      setRecipes(response.data.results);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err);
+      } else {
+        setError(new Error("Une erreur inattendue est survenue."));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!query) return; // If query is empty, don't fetch data
+    if (!query) {
+      fetchRandomRecipes();
+      return;
+    }
 
-    // Function to fetch recipes from the API
     const fetchRecipes = async () => {
-      // Prevent exceeding 10 API calls
       if (callCountRef.current >= 10) {
-        setError(new Error("API call limit reached"));
+        setError(new Error("Limite d'appels API atteinte"));
         return;
       }
-      setLoading(true); // Set loading state to true when API request starts
-      callCountRef.current += 1; // Increment the call count
+      setLoading(true);
+      callCountRef.current += 1;
       try {
-        // Making the API request to fetch recipes
         const response = await axios.get<ApiResponse>(BASE_URL, {
-          params: { q: query }, // Send the query parameter in the request
+          params: { q: query },
           headers: {
-            'X-RapidAPI-Key': API_KEY, // Sending API key in headers
-            'X-RapidAPI-Host': 'tasty.p.rapidapi.com' // The API host
+            'X-RapidAPI-Key': API_KEY,
+            'X-RapidAPI-Host': 'tasty.p.rapidapi.com'
           }
         });
-        setRecipes(response.data.results); // Setting the recipes state with the fetched data
-      } catch (err: unknown) {
+        setRecipes(response.data.results);
+      } catch (err) {
         if (err instanceof Error) {
-          setError(err); // If error is an instance of Error, set it in state
+          setError(err);
         } else {
-          setError(new Error("An unexpected error occurred.")); // Fallback for unexpected errors
+          setError(new Error("Une erreur inattendue est survenue."));
         }
       }
-      setLoading(false); // Set loading state to false when the API request is done
+      setLoading(false);
     };
 
-    fetchRecipes(); // Call the function to fetch recipes when the query changes
-  }, [query]); // This effect runs every time the query changes
+    fetchRecipes();
+  }, [query]);
   
   // Return the recipes, loading state, and error state so they can be used by the component
-  return { recipes, loading, error };
+  return { recipes, loading, error, fetchRandomRecipes };
 };
 
 export default useRecipes; // Exporting the custom hook
